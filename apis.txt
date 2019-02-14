@@ -1,0 +1,100 @@
+API for WebRAT (Web-based Router Administration Tool)
+=====================================================
+
+Versioning:         The API uses
+
+Data:               The whole API uses JSON exclusively for data representation
+
+Security:           SSL
+
+Authentication:     - Tokens created after registration of users.
+                    - Tokens to be requested from URL XXX by POSTing Username/Password combination as JSON (see below)
+                    - Tokens to be sent using Authentication header as part of the HTTP request
+
+Permissions:
+
+Filtering:
+
+Sorting:
+
+Pagination:
+
+
+-----[ /routers ]----------
+
+URL:        /routers
+Type:       Collection
+Methods:    GET         Returns a list of all routers known to the system, including all attributes stored in the database
+            PUT         --- Not implemented
+            POST        --- Not implemented (objects only created by importing data from MeshViewer, not manually)
+            PATCH       --- Not implemented
+            DELETE      --- Not Implemented
+Queries:    ?owner={user_id}
+            ?hostname={string/pattern}
+            ?site_code={string}
+            ?autoupdate_enabled={bool}
+            ?autoupdate_branch={string}
+            ?firmware_base={string}
+            ?firmware_release={string}
+            ?geofence={string/tuple?}
+            ?is_online={bool}
+            ?last_seen={string/datetime}
+            ?nodeid={string}
+            ?gateway={string}
+            ?gateway_nexthop={string}
+            ?ipaddress={string/ipv6address}
+            ?model={string}
+            ?last_import={string/datetime}
+            ?first_import={string/datetime}
+
+
+-----[ / routers/{router_id} ]----------
+
+URL:        /routers/{router_id}
+Type:       Entity
+Methods:    GET
+            PUT
+            POST
+            PATCH
+            DELETE
+Queries:
+
+-----[ / routers/{router_id}/configuration ]----------
+
+URL:        /routers/{router_id}/configuration
+Type:       Entity
+Methods:    GET         Returns the configuration (UCI parameters) for a router identified by {router_id}
+                        using credentials identified by {credential_id} supplied as query parameter ?credential
+            PUT         Updates the whole configuration (UCI parameters) for router identified by {router_id}
+                        using credentials identified by {credential_id} supplied as query parameter ?credential
+            POST        --- Not implemented
+            PATCH       Updates a partial configuration (UCI parameters) for router identified by {router_id}
+                        using credentials identified by {credential_id} supplied as query parameter ?credential
+            DELETE      --- Not implemented
+Queries:    ?credential={credential_id} --> mandatory
+            ?parameter={string/list?}  Returns only parameter identified by {string} from the configuration (GET only)
+
+
+/routers/{router_id}/crontab
+
+-----
+
+/credentials
+
+/users
+
+/configurations/ (UCI, Crontab, ...?)
+
+/updates    (Log-Datei, wer hat wann welche Router aktualisiert, Config vorher, Config nachher)
+
+
+
+-----
+
+Topics:
+
+Filtering (inkl. größer/kleiner, oder)
+Versioning
+Pagination
+Authentication
+Permissions
