@@ -20,11 +20,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# ---> Override in settings_secret.py !!!
-SECRET_KEY = ''
+SECRET_KEY = 'insert your secret key here'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# ---> Overreide in settings_secret.py
 DEBUG = False
 
 ALLOWED_HOSTS = []
@@ -39,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'routers.apps.RoutersConfig',
+    'rest_framework',
+    'nodes.apps.NodesConfig',
+    'credentials.apps.CredentialsConfig',
+    'configurations.apps.ConfigurationsConfig',
 ]
 
 MIDDLEWARE = [
@@ -123,10 +124,41 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Overrides for variables like secret keys, passwords etc. that are not commited to version control
-# for obvious reasons. See settings_secret.py.template for those keys and enter your own values there.
+# --------------------------------------
+# Django REST Framework seetings go here
+# --------------------------------------
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}
+
+# --------------------------------
+# WebRAT-specific seetings go here
+# --------------------------------
+
+# WebRAT's secret key, used for encrypting stored credentials
+# see https://cryptography.io/en/latest/fernet/ on how to generate
+# your own key.
+# TODO: Move this to Environment Variable to not have this stored in the file system?
+WEBRAT_SECRET_KEY = b'insert your WebRAT secret key here'
+
+# URLs to get Meshviewer data from
+WEBRAT_MESHVIEWER_URLS = {
+    'sitecode1': 'URL1',
+    'sitecode2': 'URL2',
+    'sitecode3': 'URL3',
+}
+
+# Remove routers from database and do not create/update routers that have
+# been down for a period of time. Value is given in days and calculated from
+# the current point in time.
+WEBRAT_PURGE_PERIOD = 30
+
+# Overrides for variables like secret keys, passwords etc. that are not to be
+# commited to version control for obvious reasons.
 
 try:
-    from settings_secret import *
+    from .settings_local import *
 except ImportError as e:
     pass
